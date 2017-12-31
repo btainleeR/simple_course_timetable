@@ -8,7 +8,7 @@
 - 世界上最好的语言PHP构建的最好用的框架:ThinkPHP3.2.1(实际上是到目前位置最常用的框架）
 - 世界上使用最广的前端css框架: 来自Twitter的Bootstrap
 - 世界上会js的人就应该会的框架: Jquery3.2.1
-- 迫于无奈不得不使用的弹窗框： layerUI
+- 迫于无奈不得不使用的弹窗框： layer.js
 
 ## 不久之后，当我见识到YII2框架的Gii工具之后，我的内心是奔溃的~
 <img src="http://oumh6gonh.bkt.clouddn.com/17-12-31/70667316.jpg" />
