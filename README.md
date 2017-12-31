@@ -3,5 +3,5 @@
 <br><br><br><br><br>
 
 <center>不久之后，当我见识到YII2框架的Gii工具之后，我的内心是奔溃的</center>
-<img src="http://img1.imgtn.bdimg.com/it/u=1898337610,4278646885&fm=11&gp=0.jpg" />
+<img src="http://oumh6gonh.bkt.clouddn.com/17-12-31/70667316.jpg" />
 
