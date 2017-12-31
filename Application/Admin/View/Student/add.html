@@ -1,0 +1,95 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>新增学生信息</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <label for="name" class="control-label">姓名:</label>
+                        <input type="text" name="name" id="name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">初始密码:</label>
+                        <input type="text" name="password" id="password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="number" class="control-label">学号:</label>
+                        <input type="text" name="number" id="number" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sex" class="control-label">性别:</label>
+                        <select name="sex" id="sex" class="form-control">
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zhuanye" class="control-label">专业:</label>
+                        <select name="zhuanye" id="zhuanye" class="form-control">
+                            <option value=""></option>
+                            <foreach name="subjectinfo" item="vo">
+                                <option value="{$vo.id}">{$vo.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="grade" class="control-label">年级:</label>
+                        <input type="text" name="grade" id="grade" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="iclass" class="control-label">班级:</label>
+                        <select name="class" id="iclass" class="form-control">
+                            <option value=""></option>
+                            <foreach name="classinfo" item="vo">
+                                <option value="{$vo.id}">{$vo.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="javascript:add()"><span class="glyphicon glyphicon-plane"></span>添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+        function add() {
+            var name = $('#name').val();
+            var password = $('#password').val();
+            var number = $('#number').val();
+            var sex = $('#sex').val();
+            var zhuanye = $('#zhuanye').val();
+            var grade = $('#grade').val();
+            var iclass = $('#iclass').val();
+
+            //保存新的学生信息
+            $.ajax({
+                type: "POST",
+                data: {
+                    name:name,
+                    password:password,
+                    number:number,
+                    sex:sex,
+                    zhuanye:zhuanye,
+                    grade:grade,
+                    iclass:iclass,
+                },
+                url: '/Admin/Student/ajax_addStudent',
+                success: function (data) {
+                    if(data.error == 0)
+                    {
+                        window.location = "/Admin/Student/index";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    </script>
+</block>

@@ -1,0 +1,246 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>查看课表</h1>
+                <select name="class"  class="form-control" id="classid">
+                    <option value="" >请选择班级</option>
+                    <foreach name="classinfo" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="row">
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <tr style="background-color:grey;height:40px">
+                        <th></th>
+                        <th>星期一</th>
+                        <th>星期二</th>
+                        <th>星期三</th>
+                        <th>星期四</th>
+                        <th>星期五</th>
+                        <th>星期六</th>
+                        <th>星期日</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script src="__PUBLIC__/admin/layer/layer.js"></script>
+    <script type="text/javascript">
+
+        var teacherOption = "<foreach name='teacherinfo' item='vo'><option value='{$vo.id}'>{$vo.name}</option></foreach>";
+        //选择班级后根据服务器返回信息生成新的课表
+        $('#classid')
+            .bind('change',function(){
+                var classid = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        class:classid,
+                    },
+                    url: '/Admin/Lesson/ajax_getLessons',
+                    success : function(data) {
+                       $('tbody').html('');
+                       if(data == null) {
+                           data = '1';
+                       }
+                      create(data);
+                    },
+                });
+            });
+
+        //根据课表信息结构生成课表函数
+        function create(data) {
+            var ihtml = '';
+            for (var i = 1;i < 6; i++){
+                ihtml += '<tr><td>第'+i+'节</td>';
+                for(var j = 1;j < 8; j++){
+                    var id = i*7-7+j;
+                    if(undefined != data[id]) {
+                        ihtml += '<td value="'+id+'" ondblclick="javascript:popModifyLesson('+id+')">'+data[id].name+'</td>';
+                    }else {
+                        ihtml += '<td value="'+id+'" ondblclick="javascript:popAddLesson('+id+')"></td>';
+                    }
+                }
+                ihtml += '</tr>';
+            }
+            $('tbody').append(ihtml);
+        }
+
+        //根据一节课的详细信息生成弹窗
+        function createModifyHtml(data,id){
+            var ihtml = '<div style="padding:20px;">\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="name" class="control-label">课程名称</label>\n' +
+                '      <input type="text" name="name" id="name" class="form-control" value="'+data.name+'">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="teacher" class="control-label">任课老师</label>\n' +
+                '      <select  id="iteacher" class="form-control">\n' +
+                          teacherOption      +
+                '      </select>\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="number" class="control-label">开课号</label>\n' +
+                '      <input type="text" name="number" id="number" class="form-control" value="'+data.number+'">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="last" class="control-label">学时</label>\n' +
+                '      <input type="text" id="last" class="form-control" value="'+data.last+'">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="score" class="control-label">学分</label>\n' +
+                '      <input type="text" name="score" id="score" class="form-control" value="'+data.score+'">\n' +
+                '    </div>\n' +
+                '    <div class="col-md-6 col-md-offset3">\n' +
+                '      <button class="btn btn-info" onclick="javascript:modifylesson('+id+')">提交</button>\n' +
+                '    </div>\n' +
+                '  </div>';
+            return ihtml;
+        }
+
+        //弹出添加课程的弹窗
+        function popAddLesson(id){
+            var ihtml = '<div style="padding:20px;">\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="name" class="control-label">课程名称</label>\n' +
+                '      <input type="text" name="name" id="name" class="form-control">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="teacher" class="control-label">任课老师</label>\n' +
+                '      <select  id="iteacher" class="form-control">\n' +
+                            teacherOption      +
+                '      </select>\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="number" class="control-label">开课号</label>\n' +
+                '      <input type="text" name="number" id="number" class="form-control">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="last" class="control-label">学时</label>\n' +
+                '      <input type="text" id="last" class="form-control">\n' +
+                '    </div>\n' +
+                '    <div class="form-group">\n' +
+                '      <label for="score" class="control-label">学分</label>\n' +
+                '      <input type="text" name="score" id="score" class="form-control">\n' +
+                '    </div>\n' +
+                '    <div class="col-md-6 col-md-offset3">\n' +
+                '      <button class="btn btn-info" onclick="javascript:addlesson('+id+')">提交</button>\n' +
+                '    </div>\n' +
+                '  </div>';
+
+            layer.open({
+                type: 1,
+                area: ['600px', '600px'],
+                shadeClose: true, //点击遮罩关闭
+                content: ihtml,
+            });
+        }
+
+
+        //弹出修改课程的弹窗
+        function popModifyLesson(id) {
+            var iclass = $('#classid').val();
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    class:iclass,
+                    time:id
+                },
+                url: "/Admin/Lesson/ajax_getLessoninfo",
+                success: function(data){
+                    var ihtml = createModifyHtml(data,id);
+                    layer.open({
+                        type: 1,
+                        area: ['600px', '600px'],
+                        shadeClose: true, //点击遮罩关闭
+                        content: ihtml,
+                    });
+                    $('#iteacher').val(data.teacher);
+                }
+            });
+        }
+
+
+
+        //ajax添加课程
+        function addlesson(time) {
+            var iclass = $('#classid').val();
+            var name = $('#name').val();
+            var number = $('#number').val();
+            var time = time;
+            var last  =$('#last').val();
+            var score = $('#score').val();
+            var teacher = $('#iteacher').val();
+
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    name:name,
+                    number:number,
+                    time:time,
+                    last:last,
+                    score:score,
+                    teacher:teacher,
+                    class:iclass
+                },
+                url: '/Admin/Lesson/ajax_addLesson',
+                success: function (data) {
+                    if(data.error == 0) {
+                    window.location = '/Admin/Lesson/index';
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            })
+
+
+        }
+
+        //ajax修改课程
+        function modifylesson(time) {
+            var iclass = $('#classid').val();
+            var name = $('#name').val();
+            var number = $('#number').val();
+            var time = time;
+            var last = $('#last').val();
+            var score = $('#score').val();
+            var teacher = $('#iteacher').val();
+
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    name: name,
+                    number: number,
+                    time: time,
+                    last: last,
+                    score: score,
+                    teacher: teacher,
+                    class: iclass
+                },
+                url: '/Admin/Lesson/ajax_modifyLesson',
+                success: function (data) {
+                    if (data.error == 0) {
+                        window.location = '/Admin/Lesson/index';
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    </script>
+</block>

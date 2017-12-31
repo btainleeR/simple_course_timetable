@@ -1,0 +1,76 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>查看课表</h1>
+                <select name="class"  class="form-control" id="iteacher">
+                    <option value="" >请选择老师</option>
+                    <foreach name="teacherinfo" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="row">
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <tr style="background-color:grey;height:40px">
+                        <th></th>
+                        <th>星期一</th>
+                        <th>星期二</th>
+                        <th>星期三</th>
+                        <th>星期四</th>
+                        <th>星期五</th>
+                        <th>星期六</th>
+                        <th>星期日</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+
+        //选择老师后查询数据
+        $('#iteacher')
+            .bind('change',function(){
+                var teacher = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        teacher:teacher,
+                    },
+                    url: '/Admin/Lesson/ajax_getTeacherLessons',
+                    success: function(data){
+//                        console.log(data);
+                        create(data);
+                    }
+                });
+            });
+        //根据课表信息结构生成课表函数
+        function create(data) {
+            var ihtml = '';
+            for (var i = 1;i < 6; i++){
+                ihtml += '<tr><td>第'+i+'节</td>';
+                for(var j = 1;j < 8; j++){
+                    var id = i*7-7+j;
+                    if(undefined != data[id]) {
+                        ihtml += '<td value="'+id+'" ondblclick="javascript:popModifyLesson('+id+')">'+data[id].name+'@'+data[id].classname+'班</td>';
+                    }else {
+                        ihtml += '<td value="'+id+'" ondblclick="javascript:popAddLesson('+id+')"></td>';
+                    }
+                }
+                ihtml += '</tr>';
+            }
+            $('tbody').html('');
+            $('tbody').append(ihtml);
+        }
+    </script>
+</block>

@@ -1,0 +1,44 @@
+[ 2017-11-01T09:40:17+08:00 ] ::1 /
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000013s ]
+INFO: [ app_init ] --END-- [ RunTime:0.011471s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.016403s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.016440s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplaceBehavior [ RunTime:0.000037s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000068s ]
+INFO: Run Behavior\ParseTemplateBehavior [ RunTime:0.087327s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.087364s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCacheBehavior [ RunTime:0.011081s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.011115s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTraceBehavior [ RunTime:0.013113s ]
+INFO: [ app_end ] --END-- [ RunTime:0.013144s ]
+
+[ 2017-11-01T09:40:27+08:00 ] ::1 /Home/Api/login
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000006s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000234s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000340s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000359s ]
+SQL: SHOW COLUMNS FROM `student` [ RunTime:0.0128s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `student` WHERE `username` = 'admin' LIMIT 1   [ RunTime:0.0003s ]
+SQL: SELECT `salt` FROM `student` WHERE `username` = 'admin' LIMIT 1   [ RunTime:0.0002s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `student` WHERE `username` = 'admin' AND `password` = 'f6fdffe48c908deb0f4c3bd36c032e72' LIMIT 1   [ RunTime:0.0002s ]
+
+[ 2017-11-01T17:51:42+08:00 ] ::1 /Home/Api/login
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000009s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000259s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000353s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000371s ]
+SQL: SHOW COLUMNS FROM `student` [ RunTime:0.0131s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `student` WHERE `username` = 'admin' LIMIT 1   [ RunTime:0.0004s ]
+SQL: SELECT `salt` FROM `student` WHERE `username` = 'admin' LIMIT 1   [ RunTime:0.0002s ]
+SQL: SELECT COUNT(*) AS tp_count FROM `student` WHERE `username` = 'admin' AND `password` = 'f6fdffe48c908deb0f4c3bd36c032e72' LIMIT 1   [ RunTime:0.0002s ]
+

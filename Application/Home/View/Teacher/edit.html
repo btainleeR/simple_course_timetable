@@ -1,0 +1,73 @@
+<extend name="common:teacher" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>个人信息修改</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="form-group">
+                        <label for="name" class="control-label">姓名:</label>
+                        <input type="text"  id="name" class="form-control" disabled value="{$teacherinfo['name']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">设置密码:</label>
+                        <input type="text" id="password" placeholder="留空则保留原密码" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="number" class="control-label">教工号:</label>
+                        <input type="text" id="number" class="form-control" disabled value="{$teacherinfo['number']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="sex" class="control-label">性别:</label>
+                        <input type="text" id="sex" class="form-control" disabled value="{$teacherinfo['sex']|getSexNameByVal}">
+                    </div>
+                    <div class="form-group">
+                        <label for="zhicheng" class="control-label">职称:</label>
+                        <div id="zhicheng">
+                            {$teacherinfo['zhicheng']|getZhichengButton}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="job" class="control-label">职务</label>
+                        <input type="text" id="job" class="form-control" disabled value="{$teacherinfo['job']}">
+                    </div>
+                    <div class="from-group">
+                        <button class="btn btn-info" onclick="javascript:edit()">
+                            <span class="glyphicon glyphicon-plane"></span>
+                            修改密码
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+        console.log({$teacherinfo['zhicheng']});
+        //修改密码
+        function edit() {
+           var password = $('#password').val();
+           if(undefined != password) {
+               $.ajax({
+                   type: "POST",
+                   data: {
+                       password:password,
+                   },
+                   url: '/Home/Teacher/ajax_setPassword',
+                   success: function(data) {
+                       if(data.error == 0) {
+                           window.location = '/Home/Teacher/index';
+                       }else {
+                           alert(data.msg);
+                       }
+                   }
+               });
+           }
+        }
+    </script>
+</block>

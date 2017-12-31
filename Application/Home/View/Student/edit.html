@@ -1,0 +1,77 @@
+<extend name="common:student" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>修改{$studentinfo['name']}的信息</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="form-group">
+                        <label for="name" class="control-label">姓名:</label>
+                        <input type="text" id="name" class="form-control" disabled value="{$studentinfo['name']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">新的密码</label>
+                        <input type="text" id="password" class="form-control" placeholder="留空则保留原密码！">
+                    </div>
+                    <div class="form-group">
+                        <label for="number" class="control">学号</label>
+                        <input type="text"  id="number" class="form-control" disabled value="{$studentinfo['number']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">性别:</label>
+                        <input type="text"  class="form-control" disabled value="{$studentinfo['sex']|getSexNameByVal}">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">专业:</label>
+                        <input type="text"  id="zhuanye" class="form-control" disabled value="{$studentinfo['zhuanye']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="grade" class="control-label">年级:</label>
+                        <input type="text"  id="grade" class="form-control" disabled value="{$studentinfo['grade']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="class" class="control-label">班级:</label>
+                        <input type="text"  id="class" class="form-control" disabled value="{$studentinfo['class']}">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info" onclick="javascript:iedit()">
+                            <span class="glyphicon glyphicon-pencil" ></span>修改密码
+                        </button>
+                        <input type="hidden"  id="id" class="form-control" value="{$studentinfo['id']}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+
+        //修改密码
+        function iedit() {
+            var userid = $('#id').val();
+            var password = $('#password').val();
+            if (password) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        id:userid,
+                        passowrd:password
+                    },
+                    url: "/Home/Student/ajax_setPassword",
+                    success: function(data) {
+                        if(data.error == 0){
+                            window.location = '/Home/Index/index';
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</block>

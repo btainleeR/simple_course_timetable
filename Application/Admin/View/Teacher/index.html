@@ -1,0 +1,67 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>教师信息管理</h1>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <table class="table table-bordered table hover text-center">
+                        <tr>
+                            <th>姓名</th>
+                            <th>教工号</th>
+                            <th>性别</th>
+                            <th>职称</th>
+                            <th>职务</th>
+                            <th>操作</th>
+                        </tr>
+                        <foreach name="teacherinfo" item="vo">
+                            <tr id="tr{$vo.id}">
+                                <td>{$vo.name}</td>
+                                <td>{$vo.number}</td>
+                                <td>{$vo.sex|getSexButtonByVal}</td>
+                                <td>
+                                    {$vo.zhicheng|getZhichengButton}
+                                </td>
+                                <td>{$vo.job}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="javascript:modify({$vo.id})"><span class="glyphicon glyphicon-pencil"></span>修改</button>
+                                    <button class="btn btn-danger" onclick="javascript:idelete({$vo.id})"><span class="glyphicon glyphicon-trash"></span>删除</button>
+                                </td>
+                            </tr>
+                        </foreach>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+        //ajax 删除老师信息
+        function idelete(id){
+            $.ajax({
+                type: "POST",
+                data: {
+                    id:id,
+                },
+                url: "/Admin/Teacher/ajax_deleteTeacher",
+                success: function (data) {
+                    if(data.error == 0){
+                        $('#tr'+id).fadeOut('slow');
+                    }else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        //修改按钮
+        function modify(id) {
+            window.location = "/Admin/Teacher/edit/id/"+id;
+        }
+    </script>
+</block>

@@ -1,0 +1,80 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="page-header">
+                    <h1>专业管理</h1>
+                </div>
+                <table class="table  table-bordered text-center table-hover">
+                    <tr>
+                        <th>专业名称</th>
+                        <th>操作</th>
+                    </tr>
+                    <foreach name="data" item="vo">
+                        <tr class="tr{$vo.id}">
+                            <td>{$vo.name}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="javascript:deleteSubject({$vo.id})"><span class="glyphicon glyphicon-trash"></span>删除</button>
+                            </td>
+                        </tr>
+                    </foreach>
+                </table>
+                <div class="form-group">
+                    <input type="text"  id="subjectName" class="form-control">
+                    <button class="btn btn-info" onclick="javascript:add()"><span class="glyphicon glyphicon-plus"></span>添加专业</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+        function deleteSubject(id)
+        {
+            $.ajax({
+               type: "POST",
+               data:{
+                   id:id
+               },
+               url: "/Admin/Subject/delete",
+               success: function(data) {
+                    if(data.error == 0) {
+                        $('.tr'+id).fadeOut("slow");
+                    }
+
+                    if( data.error == 1) {
+                        alert('删除出现错误');
+                    }
+               }
+            });
+        }
+
+        function add() {
+            var subjectName = $('#subjectName').val();
+            $.ajax({
+                type: "POST",
+                data: {
+                    subjectName:subjectName,
+                },
+                url: '/Admin/Subject/add',
+                success: function(data) {
+                    if(data.error == 0){
+                        var ihtml = '<tr class="tr'+data.id+'">\n' +
+                            '                            <td>'+data.name+'</td>\n' +
+                            '                            <td>\n' +
+                            '                                <button class="btn btn-danger" onclick="javascript:deleteSubject('+data.id+')"><span class="glyphicon glyphicon-trash"></span>删除</button>\n' +
+                            '                            </td>\n' +
+                            '                        </tr>';
+                        $('table').append(ihtml);
+
+                    }else {
+                        alert(data.msg+'!');
+                    }
+                }
+            });
+        }
+    </script>
+</block>

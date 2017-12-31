@@ -1,0 +1,66 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1 >修改班级信息</h1>
+                <input type="hidden" name="id" value="{$id}">
+            </div>
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="name" class="label-control">班级名称:</label>
+                        <input type="text" name="name" id="name" class="form-control" value="{$classinfo['name']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="number" class="label-control">班级号:</label>
+                        <input type="text" name="number" id="number" class="form-control" value="{$classinfo['number']}">
+                    </div>
+                    <div class="form-group">
+                        <label for="zhuanye" class="label-control">专业:</label>
+                        <select name="zhuanye" id="zhuanye" class="form-control">
+                            <foreach name="subjectinfo" item="vo">
+                                <option value="{$vo.id}" <if condition="$classinfo['zhuanye'] eq $vo['id']">selected</if> >{$vo.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" onclick="javascript:modify()"><span class="glyphicon glyphicon-ok"></span>确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+
+        //ajax调用接口修改班级信息
+        function modify() {
+            var id = $('input[name="id"]').val();
+            var name = $('#name').val();
+            var number = $('#number').val();
+            var zhuanye = $('#zhuanye').val();
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    id:id,
+                    name:name,
+                    number:number,
+                    zhuanye:zhuanye,
+                },
+                url: "/Admin/Myclass/ajax_modifyClass",
+                success: function(data) {
+                    if(data.error == 0){
+                        window.location = "/Admin/Myclass/index";
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+
+            });
+        }
+    </script>
+</block>

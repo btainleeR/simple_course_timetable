@@ -1,0 +1,93 @@
+<extend name="common:base" />
+
+<block name="content">
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="page-header">
+                <h1>学生信息管理</h1>
+                选择班级:
+                <select name="class" id="class" class="form-control">
+                    <option value="">请选择班级</option>
+                    <foreach name="classinfo" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offfset-2">
+                    <table class="table table-hover table-bordered" id="locationTable">
+                        <tr>
+                            <th>姓名</th>
+                            <th>学号</th>
+                            <th>性别</th>
+                            <th>专业</th>
+                            <th>年级</th>
+                            <th>班级</th>
+                            <th>操作</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script type="text/javascript">
+
+        //根据选择的班级生成学生列表
+        $('#class').change(function(){
+            var ClassId = $('#class').val();
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    id:ClassId,
+                },
+                url: '/Admin/Student/ajax_showStudent',
+                success: function(data){
+                    var htmli = "<tr><th>姓名</th><th>学号</th><th>性别</th><th>专业</th><th>年级</th><th>班级</th><th>操作</th></tr>";
+                    $('#locationTable').empty();
+//                    $('#tr*').empty();
+                    $.each(data,function(i,n){
+                        var ihtml = '<tr id="tr'+n.id+'">' +
+                            '                            <td>'+n.name+'</td>' +
+                            '                            <td>'+n.number+'</td>' +
+                            '                            <td>'+n.sex+'</td>' +
+                            '                            <td>'+n.zhuanye+'</td>' +
+                            '                            <td>'+n.grade+'</td>' +
+                            '                            <td>'+n.class+'</td>' +
+                            '                            <td><button class="btn btn-primary" onclick="javascript:modify('+n.id+')"><span class="glyphicon glyphicon-pencil"></span>修改</button><button class="btn btn-danger" onclick="javascript:idelete('+n.id+')"><span class="glyphicon glyphicon-trash"></span>删除</button></td>' +
+                            '                        </tr>';
+
+                        htmli += ihtml;
+                    });
+                    $('#locationTable').append(htmli);
+                }
+            });
+        });
+
+        //ajax删除学生信息
+        function idelete(id){
+            $.ajax({
+                type: "POST",
+                data: {
+                    id:id,
+                },
+                url: '/Admin/Student/ajax_deleteStudent',
+                success: function(data) {
+                    if(data.error == 0) {
+                        $('#tr'+id).fadeOut('slow');
+                    }else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+
+        //ajax编辑学生信息
+        function modify(id) {
+            window.location = "/Admin/Student/edit/id/"+id;
+        }
+    </script>
+</block>
